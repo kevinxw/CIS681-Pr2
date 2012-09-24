@@ -1,0 +1,3 @@
+Code Analyzer is a program for quality analysis of C# code.  Its quality measures are limited to function size and cyclomatic complexity for each function in each file of a specified file set.  This tool will also analyze the distance between any two file sets using a metric based on cyclomatic complexity.
+
+The purpose of this code analysis is to find functions that may need attention because of their size and/or complexity.  A secondary purpose is to help potential developer users get a quick understanding of the structure of a set of code.  The distance measure is intended to easily find where changes have been made to code during development and maintenance.
