@@ -3,8 +3,6 @@
  * 
  */
 
-//#define TEST_PARSER
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +10,28 @@ using System.Text;
 using System.IO;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.Rules.BlockRules;
+using Kevin.CIS681.Project.CodeAnalyzer.IO;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
     class Parser {
 		private TextReader tr = null;	// the text reader used to parse current code file
-		private string filePath = null;
+        private string filePath = null;
+        private bool _isTextFile = true;    // whether the source file is a text file
+        private FileStream fs;
 
         private List<Block> blockSet = new List<Block>();   // the set of all blocks, the 1st block is the file block
 
         private Blockader.Blockader fileReader=null;   // the 1st blockader, namely the file block
 	
 		public Parser (string filePath) {
+            Logger.log("Parsing file: " + filePath);
 			if (filePath==null)
 				return;
 			// read file
-			tr = new StreamReader(this.filePath = filePath);
+            fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            tr = new StreamReader(this.filePath = filePath);
+            if (!isTextFile())
+                throw new FileLoadException("Target file ["+filePath+"] is not a text file, cannot be analyzed.");
 			// initialize the file block
 
 		}
@@ -52,12 +57,12 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             }
         }
 
-#if (TEST_PARSER)
-        public static void Main() {
-            string testCodeFile = @"x:\test.cs";
-            StreamReader sr = new StreamReader(testCodeFile);
-            Parser p = new Parser(sr);
+        private bool isTextFile() {
+            byte[] byteData = new byte[1];
+            while (_isTextFile && fs.Read(byteData, 0, byteData.Length) > 0)
+                if (byteData[0] == 0)
+                    _isTextFile = false;
+            return _isTextFile;
         }
-#endif
     }
 }

@@ -6,16 +6,21 @@ using System.Threading;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Task {
     class TaskManager {
-        private Thread[] workers = null;
         public readonly int workerNumber; // how many worker thread should be started.  cannot be changed during program running
 
-        
-        public TaskManager(int workerNumber=10) {
+        public TaskManager(int workerNumber = 10) {
             this.workerNumber = workerNumber;   // default 10 thread
+            
+            // set the min and max thread number here
+            ThreadPool.SetMaxThreads(workerNumber, workerNumber*2);
+            ThreadPool.SetMinThreads((int)(workerNumber / 2), workerNumber);
         }
         // start tasks
-        public void start() {
-            workers = new Thread[workerNumber];
+        public void start(ITask task, object state) {
+            // start workers
+            for (int i = 0; i < workerNumber; i++) {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(task.start), state);
+            }
         }
         // pause tasks
         public void pause() {

@@ -26,19 +26,28 @@ using Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
     [Serializable]
-    class Block: IXmlSerializable {
-		private Hashtable _attr = new Hashtable();
-        private Block _inner = null,
-           _outter = null,
-           _next = null,
-           _previous = null;
+    class Block : IXmlSerializable {
+        private static List<Block> blockSet = new List<Block>();
+
+
+        private Dictionary<string, string> _attr = new Dictionary<string, string>();    // attribute dictionary, key and value must be string (for Serialization)
         private List<Token> _tokens = new List<Token>(); // the tokens that included in this block
         private List<Block> _children = new List<Block>();  // children blocks
-        private string _id=null;  // the block id should be unique in one project.  It can be used to determine if two blocks are the same
+        private Block _parent = null;   // the parent of this block, null means this is a file block
+        private string __id = null;  // the block id should be unique in one project.  It can be used to determine if two blocks are the same
 
         public string Id {
             get {
                 return _id;
+            }
+        }
+
+        private string _id {
+            get {
+                return __id;
+            }
+            set {
+                this["id"] = __id = value;
             }
         }
         public Block() {
@@ -49,143 +58,84 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
             _id = bid;
         }
 
-	    // get attribute
-        public object this[string index] {
+        // get attribute
+        public string this[string index] {
             get {
-                return _attr[index];
+                return _attr.ContainsKey(index) ? _attr[index] : String.Empty;
             }
             set {
                 _attr[index] = value;
             }
         }
-        // return one's inner link
-        public Block linkIn() {
-            return _inner;
+
+        public string[] attributes {
+            get {
+                return _attr.Keys.ToArray();
+            }
         }
-        public Block linkOut(Block b) {
-            return _outter = b;
+
+        // return the children of one block
+        public List<Block> children {
+            get {
+                // this is not a copy, means its content can be changed publicly!
+                return _children;
+            }
         }
-        public Block linkOut() {
-            return _outter;
+
+        // push one token to current block, and return itself
+        public Block push(Token t) {
+            _tokens.Add(t);
+            return this;
         }
-        // b1 & b2 shall not be null
-        public static Block operator >(Block b1, Block b2) {
-           return !b1 ? null : (!b2 ? b1.next(null) : b2.previous(b1).next(b2));
+
+        public Token shift() {
+            return _tokens[_tokens.Count - 1];
         }
-        public static Block operator <(Block b1, Block b2) {
-            return !b1 ? null : (!b2 ? b1.previous(null) : b2.next(b1).previous(b2));
+
+        // push/append a token to one block
+        public static Block operator <(Block b, Token t) {
+            return b.push(t);
         }
-		
-		// push one token to current block, and return itself
-		public Block push(Token t) {
-			_tokens.Add(t);
-			return this;
-		}
-		
-		public Token shift() {
-			return _tokens[_tokens.Count-1];
-		}
-		
-		// push/append a token to one block
-		public static Block operator <(Block b, Token t) {
-			return b.push(t);
-		}
-		
-		public static Block operator >(Block b, Token t) {
-			b.shift().copyTo(t);
+
+        public static Block operator >(Block b, Token t) {
+            b.shift().copyTo(t);
             return b;
-		}
+        }
+
+        public static Block operator <(Block p, Block c) {
+            p.children.Add(c);
+            return p;
+        }
+        public static Block operator >(Block c, Block p) {
+            p.children.Add(c);
+            return c;
+        }
 
         public List<Token> tokens {
             get {
                 return _tokens;
             }
         }
-        public Block linkIn(Block b) {
-            return _inner = b;
-        }
 
-        // the operator for linkIn / linkOut, pay attention linkIn & linkOut are one-way direction
-        public static Block operator +(Block b1, Block b2) {
-            return !b1 ? null : b1.linkIn(b2);
-        }
-        public static Block operator -(Block b1, Block b2) {
-            return !b1 ? null : b1.linkOut(b2);
-        }
-
-        public static Block operator ++(Block b) {
-            return b.next();
-        }
-        public static Block operator --(Block b){
-            return b.previous();
-        }
-        public static Block operator +(Block b) {
-            return b.linkIn() | b.next();
-        }
-        public static Block operator -(Block b) {
-            return b.previous() | b.linkOut();
-        }
-        public static Block operator |(Block b1, Block b2) {
-            return !b1 ? b2 : b1;
-        }
-        public static Block operator &(Block b1, Block b2) {
-            return (!b1 && !b2) ? b2 : null;
+        public bool hasChild {
+            get {
+                return _children.Count > 0;
+            }
         }
 
         // determine if one block is null
         public static bool operator !(Block b) {
-            return (b == null || b._id==null);
-        }
-        // get one's MOST precedent block
-        public static Block operator <<(Block b, int i) {
-            for (; i > 0 && !!b; i--)
-                b = b.previous();
-            return b;
-        }
-        public static Block operator >>(Block b, int i) {
-            for (; i > 0 && !!b; i--)
-                b = b.next();
-            return b;
+            return (b == null || b._id == null);
         }
 
-        public Block next(Block b) {
-            return _next = b;
-        }
-        public Block next() {
-            return _next;
-        }
-        public Block previous(Block b) {
-            return _previous = b;
-        }
-        public Block previous() {
-            return _previous;
-        }
-        // attention the difference!
-        // operator <<>> will throw no exception, while <> will
-        public static Block operator <(Block b, int i) {
-            for (; i > 0; i--) {
-                if (!b)
-                    throw new BlockNotFoundException();
-                b = b.previous();
-            }
-            return b;
-        }
-        public static Block operator >(Block b, int i) {
-            for (; i > 0; i--) {
-                if (!b)
-                    throw new BlockNotFoundException();
-                b = b.next();
-            }
-            return b;
-        }
-        // if the two blocks are the same
-        // ATTENTION! this method only compare the Ids, instead of every member values of the two blocks
+        // ATTENTION! this method only compare the Ids, instead of every member value
         public static bool operator ==(Block b1, Block b2) {
             return !!b1 && !!b2 && b1._id == b2._id;
         }
         public static bool operator !=(Block b1, Block b2) {
             return !b1 || !b2 || b1._id != b2._id;
         }
+
         override public bool Equals(Object o) {
             Block b = o as Block;
             if (!b)
@@ -205,7 +155,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
         /*
          * block id is a randomly generated character sequence
          */
-        private string generateBID() {
+        public static string generateBID() {
             return Text.getRandomString(32);
         }
 
@@ -228,14 +178,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
             return (null);
         }
 
-
         // Print when debug
         public override string ToString() {
-            return "Block#"+_id;
+            return "Block#" + _id;
         }
-
-
-
 
 #if DEBUG_BLOCK
         [STAThread]

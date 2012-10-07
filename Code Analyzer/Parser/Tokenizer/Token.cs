@@ -20,9 +20,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
     class Token : IXmlSerializable {
         public enum Type { LineTerminators, Comment, Keyword };
         private string _token = null;   // the content of one token, notice to save memory and performance, this is not a StringBuffer
-        private Hashtable _attr = new Hashtable();    // record the attributes of one token
+        private Dictionary<string, string> _attr = new Dictionary<string, string>();    // record the attributes of one token
 
-        public Token(string t) : this() {
+        public Token(string t)
+            : this() {
             content = t;
         }
         public Token() {
@@ -33,23 +34,23 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
             set { _token = value.Trim(); }
         }
 
-        public object this[string index] {
+        public string this[string index] {
             get {
-                return _attr[index];
+                return _attr.ContainsKey(index) ? _attr[index] : String.Empty;
             }
             set {
                 _attr[index] = value;
             }
         }
-		
-		// shallow copy data to target from current token
-		public Token copyTo(Token t) {
-			return t;
-		}
 
-        public ICollection attributes {
+        // shallow copy data to target from current token
+        public Token copyTo(Token t) {
+            return t;
+        }
+
+        public string[] attributes {
             get {
-                return _attr.Keys;
+                return _attr.Keys.ToArray();
             }
         }
 

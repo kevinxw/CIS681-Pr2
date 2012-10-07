@@ -8,22 +8,22 @@ using Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
     class Blockader {
-		private bool _isCompleted = false;
+        private bool _isCompleted = false;
         private TextReader tr = null;
 
-		private Block _current = new Block(),  // current block
+        private Block _current = null,  // current block
             _parent = null, // parent block, refers to the current block's upper level
-            _previous = null;   // previous processed block, including its upper level block and previous block
+            _master = null;   // master block, for instance, a function is the master of all its children (including grandchildren)
 
         public enum Pointer { NEXT, PREVIOUS, INNER, OUTTER, NULL };
 
         // the pointer tell blockader which direction to go next
         // when it is null, mean this block has no sibling or children, should return to its parents
         private Pointer _pointer = Pointer.NULL;
-		
-		public delegate void blockEventHandler(Block b);
-		public delegate void blockaderEventHandle(Blockader b);
-		
+
+        public delegate void blockEventHandler(Block b);
+        public delegate void blockaderEventHandle(Blockader b);
+
         public event blockEventHandler blockHandler;
         public event blockaderEventHandle blockaderHandler;
 
@@ -37,55 +37,22 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
         }
 
         // read next block, return false when there is no more block
-		public bool next(int chr) {
-            if (chr == -1) return false;
-            Blockader blocker = new Blockader(tr);
-            switch (_pointer) {
-                case Pointer.INNER:
-                    // jump in
+        public bool next(int chr) {
+            return false;
 
-                    return blocker.next((this + blocker).read(chr));
-                case Pointer.OUTTER:
-                    // return to upper level
-                    return blocker.next((this - blocker).read(chr));
-                case Pointer.PREVIOUS:
-                    // jump to the previous block, normally this operation will not be used
-                    return blocker.next((this < blocker).read(chr));
-                case Pointer.NEXT:
-                default:
-                    return blocker.next((this > blocker).read(chr));
+        }
+
+        public bool isCompleted {
+            get {
+                return _isCompleted;
             }
-		}
-
-        // link in
-        public static Blockader operator +(Blockader b1, Blockader b2) {
-            b1.currentBlock.linkIn(b2.currentBlock);
-            return b2;
-        }
-        public static Blockader operator -(Blockader b1, Blockader b2) {
-            b1.currentBlock.linkOut(b2.currentBlock);
-            return b2;
-        }
-        public static Blockader operator >(Blockader b1, Blockader b2) {
-            b1.currentBlock.next(b2.currentBlock);
-            return b2;
-        }
-        public static Blockader operator <(Blockader b1, Blockader b2) {
-            b1.currentBlock.previous(b2.currentBlock);
-            return b2;
-        }
-		
-		public bool isCompleted {
-			get{
-			    return _isCompleted;
-			}
-			set {
+            set {
                 if (_isCompleted = value) {
                     blockHandler(_current);
 
                 }
-			}
-		}
+            }
+        }
 
         public Block parentBlock {
             get {
@@ -99,30 +66,23 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
             get {
                 return _current;
             }
-            
-        }
-        public Block previousBlock {
-            get {
-                return _previous;
-            }
-            set {
-                _previous = value;
-            }
+
         }
 
         // initialize TextReader
-		public Blockader(TextReader tr) {
-			this.tr = tr;
-		}
-		
-		public Blockader (TextReader tr, Token firstToken) : this(tr) {
+        public Blockader(TextReader tr) {
+            this.tr = tr;
+        }
+
+        public Blockader(TextReader tr, Token firstToken)
+            : this(tr) {
             push(firstToken);
-		}
+        }
 
         // read from TextReader, which is, initialize a new Tokenizer
         // return until this block is completed
         public int read() {
-            int chr=-1;
+            int chr = -1;
             Tokenizer.Tokenizer toker = new Tokenizer.Tokenizer(tr);
             while (!_isCompleted && (chr = toker.read()) != -1)
                 push(toker.token);
@@ -137,7 +97,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
             }
 
             else {
-                Tokenizer.Tokenizer toker = new Tokenizer.Tokenizer(tr,(char)chr);
+                Tokenizer.Tokenizer toker = new Tokenizer.Tokenizer(tr, (char)chr);
                 while (!_isCompleted && (chr = toker.read()) != -1)
                     push(toker.token);
                 if (chr == -1)
@@ -153,9 +113,9 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
             blockaderHandler(this);
             return _isCompleted;
         }
-		
-		// pass current token to its parent
-		public void pop() {
-		}
+
+        // pass current token to its parent
+        public void pop() {
+        }
     }
 }

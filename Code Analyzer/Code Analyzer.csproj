@@ -14,6 +14,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -69,12 +69,12 @@
     <Compile Include="Exceptions\BlockNotFoundException.cs" />
     <Compile Include="Exceptions\BlockRelationshipConfusionException.cs" />
     <Compile Include="IO\FileManager.cs" />
-    <Compile Include="IO\CodeFile.cs" />
+    <Compile Include="IO\Logger.cs" />
     <Compile Include="Parser\Analyzer.cs" />
     <Compile Include="Parser\Blockader\Blockader.cs" />
     <Compile Include="Parser\Grammar\ALoader.cs" />
     <Compile Include="Parser\Actions\IgnoreToken.cs" />
-    <Compile Include="Parser\Grammar\CSharp\Loader.cs" />
+    <Compile Include="Parser\Grammar\CSharp\CSharpLoader.cs" />
     <Compile Include="Parser\Grammar\ILoader.cs" />
     <Compile Include="Parser\Grammar\Rules\BlockRules\BlockIntegrityDetector.cs" />
     <Compile Include="Parser\Grammar\Rules\BlockRules\BlockSizeCalculator.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="Parser\Grammar\Rules\BlockRules\CyclomaticComplexityCalculator.cs" />
     <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockRule.cs" />
     <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockaderRule.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\MethodBlockDetector.cs" />
     <Compile Include="Parser\Grammar\Rules\IRule.cs" />
     <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenizerRule.cs" />
     <Compile Include="Parser\Grammar\Rules\TokenRules\TokenIntegrityDetector.cs" />
@@ -94,6 +95,11 @@
     <Compile Include="Parser\Tokenizer\Tokenizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Parser\ParseTask.cs" />
     <Compile Include="Task\TaskManager.cs" />
@@ -102,6 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
