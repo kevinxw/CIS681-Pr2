@@ -21,12 +21,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
         }
 
         public List<string> listCodeFile(List<string> filePath) {
-            return listCodeFile(filePath.ToArray());
-        }
-        public List<string> listCodeFile(string[] filePath) {
             List<string> list = new List<string>();
-            foreach (string path in filePath)
-                list.Concat(listCodeFile(path));
+            if (filePath != null)
+                foreach (string path in filePath)
+                    list.AddRange(listCodeFile(path));
             return list;
         }
 

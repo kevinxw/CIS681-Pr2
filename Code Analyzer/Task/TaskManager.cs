@@ -16,9 +16,9 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Task {
             ThreadPool.SetMinThreads((int)(workerNumber / 2), workerNumber);
         }
         // start tasks
-        public void start(ITask task, object state) {
+        public void start(ITask task, object state, int taskLength=100) {
             // start workers
-            for (int i = 0; i < workerNumber; i++) {
+            for (int i = 0; i < taskLength; i++) {
                 ThreadPool.QueueUserWorkItem(new WaitCallback(task.start), state);
             }
         }

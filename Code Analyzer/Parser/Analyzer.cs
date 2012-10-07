@@ -18,9 +18,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         private TaskManager tm;
 
         public Analyzer(ILoader loader, CMDConsole cmds) {
+            grammar =loader;
             fm = new FileManager(loader);
             this.cmds = cmds;
-            toBeProcessedFileList = allFileList = fm.listCodeFile(cmds[CMDConsole.targetPathCMD] as string[]);
+            toBeProcessedFileList = allFileList = fm.listCodeFile(cmds[CMDConsole.targetPathCMD] as List<string>);
         }
 
         // start analyzing
@@ -29,7 +30,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             if (cmds[CMDConsole. threadNumberCMD] != null)
                 threadNum = Int32.Parse(cmds[CMDConsole.threadNumberCMD] as string);
             tm = new TaskManager(threadNum);
-            tm.start(new ParseTask(), toBeProcessedFileList);
+            tm.start(new ParseTask(), toBeProcessedFileList, allFileList.Count);
         }
 
     }

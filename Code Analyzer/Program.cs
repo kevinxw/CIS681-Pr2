@@ -14,8 +14,8 @@
 
 
 
-//#define TEST_ANALYZER     // test analyzer
-#define TEST_CMDCONSOLE   // test command line console
+#define TEST_ANALYZER     // test analyzer
+//#define TEST_CMDCONSOLE   // test command line console
 //#define TEST_FILEMANAGER    // test File Manager part
 
 using System;
@@ -41,11 +41,11 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 #endif
 
 #if (TEST_FILEMANAGER)
-            testFileManager()
+            testFileManager();
 #endif
 
 #if (TEST_CMDCONSOLE)
-            testCMDConsole(new string[] {"-t",@"c:\w",@"c:\www.aa","-p"});
+            testCMDConsole(new string[] {"-t",@"C:\w\s",@"c:\www.aa\2","-p"});
 #endif
             while (true) ;
         }
@@ -80,7 +80,6 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
             CMDConsole cmd = new CMDConsole(args);
             Analyzer analyzer = new Analyzer(grammarLoader, cmd);
             analyzer.start();
-
         }
 #endif
     }

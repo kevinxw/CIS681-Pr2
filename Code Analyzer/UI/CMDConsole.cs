@@ -12,7 +12,7 @@ using System.Collections;
 namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
     class CMDConsole {
         private const string CMDPrefix = "-";
-        private const string windowsPathRegExStr = @"^([a-zA-Z]:|\.{1,2}|\\)\\((?! )[^\\/:*?""<>|]+)+\\?$";
+        private const string windowsPathRegExStr = @"^([a-zA-Z]:|\.{1,2}|\\)(\\(?! )[^\\/:*?""<>|]+)*\\?$";
 
         private static readonly Regex pathRegEx = new Regex(windowsPathRegExStr, RegexOptions.Compiled);
 
@@ -23,7 +23,6 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
          * value[1]: argument regEx,
          * value[2]: cmd description,
          * value[3]: is option required,
-         * value[4]: default value
          */
         private Dictionary<string, ArrayList> _cmds = new Dictionary<string, ArrayList>();
 
@@ -35,15 +34,15 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
 
         public CMDConsole() {
             // target directory
-            _cmds.Add(targetPathCMD, new ArrayList() { 9999, pathRegEx, "The target directory you are going to analyze.", true ,@"./"});
+            _cmds.Add(targetPathCMD, new ArrayList() { 9999, pathRegEx, "The target directory you are going to analyze.", true });
             // excluded target directory
-            _cmds.Add(excludedPathCMD, new ArrayList() { 9999, pathRegEx, "", false,null });
+            _cmds.Add(excludedPathCMD, new ArrayList() { 9999, pathRegEx, "", false });
             // project directory
-            _cmds.Add(projectPathCMD, new ArrayList() { 1, pathRegEx, "", true,@"./" });
+            _cmds.Add(projectPathCMD, new ArrayList() { 1, pathRegEx, "", true });
             // help message
-            _cmds.Add(helpCMD, new ArrayList() { 0, null, "Help", false, null });
+            _cmds.Add(helpCMD, new ArrayList() { 0, null, "Help", false });
             // work thread numbers
-            _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "Number of thread that to be analyzed", false, "10" });
+            _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "Number of thread that to be analyzed", false });
         }
         public CMDConsole(string[] args)
             : this() {
@@ -79,13 +78,6 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
                 string str = null;
                 if (args[i].StartsWith(CMDPrefix) && _cmds.ContainsKey(str = args[i].Substring(1))) {
                     _args[lastCMD = str] = new List<string>();
-                    var defaultValue = _cmds[lastCMD][4];
-                    if (defaultValue != null) {
-                        if (defaultValue is List<string>)
-                            _args[lastCMD] = defaultValue as List<string>;
-                        else if(defaultValue is string)
-                            _args[lastCMD].Add(defaultValue as string);
-                    }
                 }
                 else if (lastCMD != null)
                     if ((reg=_cmds[lastCMD][1] as Regex) != null && reg.IsMatch(args[i])) {

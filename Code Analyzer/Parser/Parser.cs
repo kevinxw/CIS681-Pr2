@@ -11,6 +11,7 @@ using System.IO;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.Rules.BlockRules;
 using Kevin.CIS681.Project.CodeAnalyzer.IO;
+using System.Threading;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
     class Parser {
@@ -24,7 +25,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         private Blockader.Blockader fileReader=null;   // the 1st blockader, namely the file block
 	
 		public Parser (string filePath) {
-            Logger.log("Parsing file: " + filePath);
+            Console.Out.WriteLine("Thread ID {0} is parsing file {1}. ", Thread.CurrentThread.ManagedThreadId,filePath);
 			if (filePath==null)
 				return;
 			// read file

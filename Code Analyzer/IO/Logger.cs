@@ -10,7 +10,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
         private static string _saveTo = @"C:\CodeAnalyzer.log";   // default log saving path
         public static Redierction output = Redierction.Console; // log will be out put to console by default
         private static StreamWriter sw = new StreamWriter(_saveTo, true, Encoding.UTF8);    // log writer
-        public static bool enable = false;   // enable logging
+        public static bool enable = true;   // enable logging
 
         public static string saveTo {
             get { return _saveTo; }
