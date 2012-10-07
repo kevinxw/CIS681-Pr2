@@ -8,10 +8,11 @@
     <ProjectGuid>{D66D9550-3DA7-41DA-BD75-2E06593FAB75}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kevin.CIS681.Project1.CodeAnalyzer</RootNamespace>
+    <RootNamespace>Kevin.CIS681.Project.CodeAnalyzer</RootNamespace>
     <AssemblyName>Code Analyzer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -49,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Kevin.CIS681.Project1.CodeAnalyzer.Program</StartupObject>
+    <StartupObject>Kevin.CIS681.Project.CodeAnalyzer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>CodeAnal.ico</ApplicationIcon>
@@ -64,16 +65,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Persistence\Project.cs" />
+    <Compile Include="Exceptions\BlockNotFoundException.cs" />
+    <Compile Include="Exceptions\BlockRelationshipConfusionException.cs" />
     <Compile Include="IO\FileManager.cs" />
-    <Compile Include="IO\IFile.cs" />
+    <Compile Include="IO\CodeFile.cs" />
+    <Compile Include="Parser\Analyzer.cs" />
+    <Compile Include="Parser\Blockader\Blockader.cs" />
+    <Compile Include="Parser\Grammar\ALoader.cs" />
+    <Compile Include="Parser\Actions\IgnoreToken.cs" />
     <Compile Include="Parser\Grammar\CSharp\Loader.cs" />
     <Compile Include="Parser\Grammar\ILoader.cs" />
-    <Compile Include="Parser\Tokenizer\Block.cs" />
-    <Compile Include="Parser\Tokenizer\IRule.cs" />
-    <Compile Include="Parser\Tokenizer\IAction.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockIntegrityDetector.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockSizeCalculator.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockTypeDetector.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\CyclomaticComplexityCalculator.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockRule.cs" />
+    <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockaderRule.cs" />
+    <Compile Include="Parser\Grammar\Rules\IRule.cs" />
+    <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenizerRule.cs" />
+    <Compile Include="Parser\Grammar\Rules\TokenRules\TokenIntegrityDetector.cs" />
+    <Compile Include="Parser\Grammar\Rules\TokenRules\TokenTypeDetector.cs" />
+    <Compile Include="Parser\Blockader\Block.cs" />
+    <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenRule.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\Actions\IAction.cs" />
     <Compile Include="Parser\Tokenizer\Token.cs" />
+    <Compile Include="Parser\Tokenizer\Tokenizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\ITask.cs" />
+    <Compile Include="Parser\ParseTask.cs" />
+    <Compile Include="Task\TaskManager.cs" />
+    <Compile Include="UI\CMDConsole.cs" />
+    <Compile Include="Utils\Text.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -97,8 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CodeAnal.ico" />
-    <Content Include="Untitled drawing.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
