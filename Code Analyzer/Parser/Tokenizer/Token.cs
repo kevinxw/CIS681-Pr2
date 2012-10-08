@@ -55,7 +55,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
         }
 
         // get token
-        public string toString() {
+        public override string ToString() {
             return _token;
         }
 

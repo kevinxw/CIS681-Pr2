@@ -3,8 +3,6 @@
  * Tokenizer is a module that extract tokens from Text Reader
  */
 
-//#define TEST_TOKENIZER
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +16,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
 
         private StringBuilder sb = new StringBuilder();  // current token read buffer.
         private TextReader tr = null;   // text reader
-        private Token t=new Token();
+        private Token t = new Token();
         private TokenStatus _tokenStatus = TokenStatus.NULL;
 
         public delegate void tokenizerEventHandler(Tokenizer t);   // triggered when a new char is read, decide what tokenizer should do next
@@ -28,7 +26,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
         public event tokenizerEventHandler tokenizerHandler;
 
         private int _whitespaceCount = 0;   // the number of whitespace locating at the beginning of the string, can be used to detect special structure, such as EOF
-        
+
         public Tokenizer(string t) {
             push(t);
         }
@@ -73,7 +71,8 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
             }
             sb.Append(chr); // read char into buffer
             // actually, the handle can be invoked asynchronizely, but will it take more time initializing new thread than the time we saved?
-            tokenizerHandler(this);
+            if (tokenizerHandler != null)
+                tokenizerHandler(this);
             return _tokenStatus;
         }
 
@@ -118,19 +117,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer {
             set {
                 if (_tokenStatus != value)
                     if ((_tokenStatus = value) == TokenStatus.COMPLETED) {
-                    t.content = sb.ToString();
-                    tokenHandler(t);
-                }
+                        t.content = sb.ToString();
+                        if (tokenHandler != null)
+                            tokenHandler(t);
+                    }
             }
         }
 
-#if (TEST_TOKENIZER)
-        public static void Main() {
-            string testCodeFile = @"x:\test.cs";
-            StreamReader sr = new StreamReader(testCodeFile);
-            Tokenizer ter = new Tokenizer(sr);
-        }
-#endif
     }
 
 }

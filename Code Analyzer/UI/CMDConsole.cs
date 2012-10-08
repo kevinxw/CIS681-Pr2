@@ -31,18 +31,24 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
         public const string projectPathCMD = "p";
         public const string helpCMD = "h";
         public const string threadNumberCMD = "th";
+        public const string noSubDirectoryCMD = "ns";
+        public const string wildcardSearchCMD = "w";
 
         public CMDConsole() {
             // target directory
             _cmds.Add(targetPathCMD, new ArrayList() { 9999, pathRegEx, "The target directory you are going to analyze.", true });
             // excluded target directory
-            _cmds.Add(excludedPathCMD, new ArrayList() { 9999, pathRegEx, "", false });
+            _cmds.Add(excludedPathCMD, new ArrayList() { 9999, pathRegEx, "Excludes these directories or files.  Code Analyzer will ignore them when analyzing.", false });
+            // do not scan sub-directories
+            _cmds.Add(noSubDirectoryCMD, new ArrayList() { 0, null, "Enable this and Code Analyzer will not scan the sub-directories of the target directory.", false });
+            // wildcard pattern
+            _cmds.Add(wildcardSearchCMD, new ArrayList() { 9999, @"^[^\\/:""<>|]+$", "Use wildcards to match files.", false });
             // project directory
-            _cmds.Add(projectPathCMD, new ArrayList() { 1, pathRegEx, "", true });
+            _cmds.Add(projectPathCMD, new ArrayList() { 1, pathRegEx, "Specific where to save the analysis report.  No result will be saved if this is not specificed.", false });
             // help message
-            _cmds.Add(helpCMD, new ArrayList() { 0, null, "Help", false });
+            _cmds.Add(helpCMD, new ArrayList() { 0, null, "show Help information, about how to use this software", false });
             // work thread numbers
-            _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "Number of thread that to be analyzed", false });
+            _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "set the number of threads that to be used in analyzing.  Ten threads by default if not specificed.", false });
         }
         public CMDConsole(string[] args)
             : this() {
@@ -74,6 +80,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
         public void readCommands(string[] args) {
             string lastCMD = null;
             Regex reg = null;
+            // read arguments
             for (int i = 0; i < args.Length; i++) {
                 string str = null;
                 if (args[i].StartsWith(CMDPrefix) && _cmds.ContainsKey(str = args[i].Substring(1))) {
@@ -88,6 +95,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
                     else
                         throw new ArgumentException("The argument \"" + args[i] + "\" is not valid!");
             }
+            // check if every required argument is read
         }
     }
 }

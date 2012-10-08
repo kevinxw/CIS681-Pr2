@@ -29,7 +29,6 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader {
     class Block : IXmlSerializable {
         private static List<Block> blockSet = new List<Block>();
 
-
         private Dictionary<string, string> _attr = new Dictionary<string, string>();    // attribute dictionary, key and value must be string (for Serialization)
         private List<Token> _tokens = new List<Token>(); // the tokens that included in this block
         private List<Block> _children = new List<Block>();  // children blocks

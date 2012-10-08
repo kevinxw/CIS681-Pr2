@@ -13,8 +13,8 @@
  */
 
 
-
-#define TEST_ANALYZER     // test analyzer
+#define TEST_TOKENIZER
+//#define TEST_ANALYZER     // test analyzer
 //#define TEST_CMDCONSOLE   // test command line console
 //#define TEST_FILEMANAGER    // test File Manager part
 
@@ -36,8 +36,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 
         static void Main(string[] args) {
             //Logger.enable = true;   // enable logging for debugging
+
+#if (TEST_TOKENIZER)
+            testTokenizer(args);
+#endif
+
 #if (TEST_ANALYZER)
-            testAnalyzer(new string[] {"-t",@"D:\Dropbox\Projects\CSharp",@"c:\www.aa","-p"});
+            testAnalyzer(new string[] { "-t", @"D:\Dropbox\Projects\CSharp", @"c:\www.aa", "-e", @"D:\Dropbox\Projects\CSharp\Parser" });
 #endif
 
 #if (TEST_FILEMANAGER)
@@ -80,6 +85,16 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
             CMDConsole cmd = new CMDConsole(args);
             Analyzer analyzer = new Analyzer(grammarLoader, cmd);
             analyzer.start();
+        }
+#endif
+
+#if (TEST_TOKENIZER)
+        private static void testTokenizer(string[] args) {
+            string testCodeFile = @"D:\Dropbox\Projects\CSharp\Code-Analyzer\Code Analyzer\Parser\Analyzer.cs";
+            StreamReader sr = new StreamReader(testCodeFile);
+            Tokenizer ter = new Tokenizer(sr);
+            ter.read();
+            Console.Out.WriteLine(ter.token);
         }
 #endif
     }

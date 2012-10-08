@@ -21,7 +21,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             grammar =loader;
             fm = new FileManager(loader);
             this.cmds = cmds;
-            toBeProcessedFileList = allFileList = fm.listCodeFile(cmds[CMDConsole.targetPathCMD] as List<string>);
+            toBeProcessedFileList = allFileList = 
+                fm.listCodeFile(
+                cmds[CMDConsole.targetPathCMD] as List<string>,
+                cmds[CMDConsole.excludedPathCMD] as List<string>,
+                ((bool)cmds[CMDConsole.noSubDirectoryCMD]),
+                cmds[CMDConsole.wildcardSearchCMD] as List<string>
+                );
         }
 
         // start analyzing
