@@ -33,6 +33,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
         // Process all files in the directory passed in, recurse on any directories  
         // that are found, and process the files they contain. 
         public List<string> listCodeFile(string path, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards=null) {
+            path = Path.GetFullPath(path);
             // whether this path should be ignored
             if (excludePath != null) {
                 string lPath = path.ToLower().Replace("/", @"\");   // convert to lower case

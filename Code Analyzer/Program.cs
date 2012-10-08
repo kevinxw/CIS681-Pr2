@@ -12,8 +12,8 @@
  * Main Program
  */
 
-
-#define TEST_TOKENIZER
+#define TEST_SIMPLEPARSER   // test simple parser
+//#define TEST_TOKENIZER       // test tokenizer
 //#define TEST_ANALYZER     // test analyzer
 //#define TEST_CMDCONSOLE   // test command line console
 //#define TEST_FILEMANAGER    // test File Manager part
@@ -36,6 +36,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 
         static void Main(string[] args) {
             //Logger.enable = true;   // enable logging for debugging
+
+#if (TEST_SIMPLEPARSER)
+            testSimpleParser(args);
+#endif
 
 #if (TEST_TOKENIZER)
             testTokenizer(args);
@@ -95,6 +99,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
             Tokenizer ter = new Tokenizer(sr);
             ter.read();
             Console.Out.WriteLine(ter.token);
+        }
+#endif
+
+#if (TEST_SIMPLEPARSER)
+        private static void testSimpleParser(string[] args) {
+            string testCodeFile = @"D:\Dropbox\Projects\CSharp\Code-Analyzer\Code Analyzer\Parser\SimpleParser.cs";
+            SimpleParser sp = new SimpleParser(testCodeFile);
         }
 #endif
     }

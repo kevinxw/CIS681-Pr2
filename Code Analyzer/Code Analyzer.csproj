@@ -73,7 +73,6 @@
     <Compile Include="Parser\Analyzer.cs" />
     <Compile Include="Parser\Blockader\Blockader.cs" />
     <Compile Include="Parser\Grammar\ALoader.cs" />
-    <Compile Include="Parser\Actions\IgnoreToken.cs" />
     <Compile Include="Parser\Grammar\CSharp\CSharpLoader.cs" />
     <Compile Include="Parser\Grammar\ILoader.cs" />
     <Compile Include="Parser\Grammar\Rules\BlockRules\BlockIntegrityDetector.cs" />
@@ -90,7 +89,7 @@
     <Compile Include="Parser\Blockader\Block.cs" />
     <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenRule.cs" />
     <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\Actions\IAction.cs" />
+    <Compile Include="Parser\SimpleParser.cs" />
     <Compile Include="Parser\Tokenizer\Token.cs" />
     <Compile Include="Parser\Tokenizer\Tokenizer.cs" />
     <Compile Include="Program.cs" />

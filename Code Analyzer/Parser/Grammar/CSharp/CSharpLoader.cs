@@ -35,7 +35,6 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.CSharp {
             "|#line" +
             "|#region|#endregion" +
             "|#pragma|#pragma warning|#pragma checksum"	// pay attention to the waring & checksum keywords, they are two-word
-
             ;
 
         // every other element in this array make one pair

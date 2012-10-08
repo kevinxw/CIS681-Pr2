@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * This is the analyzer that dispatch code analysis tasks
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +25,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             grammar =loader;
             fm = new FileManager(loader);
             this.cmds = cmds;
+            // get file that going to be processed
             toBeProcessedFileList = allFileList = 
                 fm.listCodeFile(
                 cmds[CMDConsole.targetPathCMD] as List<string>,
