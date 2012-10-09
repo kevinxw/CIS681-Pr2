@@ -3,13 +3,24 @@ Code Analyzer v0.1 alpha
 		Syracuse University
 		kevixw@gmail.com
 
+		- 10/9/2012
+		
 [Introduction]
 
 Code Analyzer is actually a homework project from my class CIS681.  It is a simple software that analyzing code files.
 
-I try very hard to make this a much more universal code analyzing software, which should not only work on C# files, but also other languages such as C++, JavaScript etc.  All you need to do is just add a grammar loader class, specific the language grammar, and override a couple of detector classes (if necessary).
+I try very hard to make this a much more "universal" code analyzing software, which should not only work on C# files, but also other languages such as C++, JavaScript etc.  All you need to do is just add a grammar loader class, specific the language grammar, and override a couple of detector classes (if necessary).
 
-[Project demands]
+But due to the limit of time, this thought has not been realized yet.  (It really takes me a lot of time considering what's better data structure for a well organized software architecture.)
+
+So I makes another parser, named it "SimpleParser", which translate a C Sharp source code file into a XML report directly.  It does not use things like Tokenizer actually, but implements Regular Expression a lot.
+
+I will keep updating this software on Github until the "universal" part is finished (if I have enough time).  Thank you for your using and testing!
+
+NOTICE THE CODE ANALYSIS REPORTS, WHICH INCLUDES DATA LIKE CYCLOMATIC COMPLEXITY AND FUNCTION SIZE, ARE LOCATED IN THE SAME DIRECTORY OF EVERY SOURCE CODE FILE!!!
+
+
+[Project requirements]
 
 Code Analyzer is a program for quality analysis of C# code.  Its quality measures are limited to function size and cyclomatic complexity for each function in each file of a specified file set.  This tool will also analyze the distance between any two file sets using a metric based on cyclomatic complexity.
 
@@ -17,8 +28,20 @@ The purpose of this code analysis is to find functions that may need attention b
 
 [Uses]
 
+-t path1 [path2] ..					The target directory you are going to analyze. [REQUIRED]
+-e path1 [path2] ..					Excludes these directories or files.  Code Analyzer will ignore them when analyzing.
+-ns									Enable this and Code Analyzer will not scan the sub-directories of the target directory.
+-w wildcard1 [wildcard2] ..			Use wildcards to match files.
+-h									show Help information, about how to use this software.
+-th threadNumber					set the number of threads that to be used in analyzing.  Ten threads by default if not specificed.
+-d									Enable distance compare.  When this option is specificed, Code Analyzer will calculate the distance between the first code files and all the rest found in target directory.
+-na									Disable code analyzing. When you have former reports remain not deleted and you just want to calculate file distance, you may not need to analyze all the codes again!
+-ad									Be careful to enable this option! It will calculate distance of all possible file combination! That's O(n^2)!
+-ri path							Specific a path where analysis log will be saved.
 
+Ex. Analyze code in X:\ and calculate distance between the first file and the others, save log file to "X:\CodeAnalyzer.log"
 
+"Code Analyzer.exe" -t "X:\" -d -ri "X:\CodeAnalyzer.log"
 
 [Appendix]
 

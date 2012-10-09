@@ -12,7 +12,7 @@ using System.Collections;
 namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
     class CMDConsole {
         private const string CMDPrefix = "-";
-        private const string windowsPathRegExStr = @"^([a-zA-Z]:|\.{1,2}|\\)(\\(?! )[^\\/:*?""<>|]+)*\\?$";
+        private const string windowsPathRegExStr = @"^(([a-zA-Z]:|\\)(\\(?! )[^\\/:*?""<>|]+)*|((\.{1,2}/)*(?! )[^\\/:*?""<>|]+)*)$";
 
         private static readonly Regex pathRegEx = new Regex(windowsPathRegExStr, RegexOptions.Compiled);
 
@@ -24,7 +24,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
          * value[2]: cmd description,
          * value[3]: is option required,
          */
-        private Dictionary<string, ArrayList> _cmds = new Dictionary<string, ArrayList>();
+        private static Dictionary<string, ArrayList> _cmds = new Dictionary<string, ArrayList>();
 
         public const string targetPathCMD = "t";
         public const string excludedPathCMD = "e";
@@ -34,9 +34,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
         public const string noSubDirectoryCMD = "ns";
         public const string wildcardSearchCMD = "w";
         public const string distanceCMD = "d";
-        public const string compareTargetPathCMD = "c";
+        public const string allDistanceCMD = "ad";
+        public const string disableAnalyzeCMD = "na";
+        public const string redirectInfoCMD = "ri";
 
-        public CMDConsole() {
+        private static StringBuilder _helpMsg = new StringBuilder("====== Help information ======\n\n");
+
+        static CMDConsole() {
             // target directory
             _cmds.Add(targetPathCMD, new ArrayList() { 9999, pathRegEx, "The target directory you are going to analyze.", true });
             // excluded target directory
@@ -52,12 +56,28 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
             // work thread numbers
             _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "set the number of threads that to be used in analyzing.  Ten threads by default if not specificed.", false });
             // if we should calculate distance
-            _cmds.Add(distanceCMD, new ArrayList() { 0, null, "enable distance compare", false });
-            // target distance compare directory
-            _cmds.Add(compareTargetPathCMD, new ArrayList() { 9999, pathRegEx, "The directory you are going to calculate distance with", false });
+            _cmds.Add(distanceCMD, new ArrayList() { 0, null, "Enable distance compare.  When this option is specificed, Code Analyzer will calculate the distance between the first code files and all the rest found in target directory.", false });
+            // disable code analyzing
+            _cmds.Add(disableAnalyzeCMD, new ArrayList() { 0, null, "Disable code analyzing. When you have former reports remain not deleted and you just want to calculate file distance, you may not need to analyze all the codes again!", false });
+            // get distance of all possible file combination
+            _cmds.Add(allDistanceCMD, new ArrayList() { 0, null, "Be careful to enable this option! It will calculate distance of all possible file combination! That's O(n^2)!", false });
+            // redirect Logger.info to file
+            _cmds.Add(redirectInfoCMD, new ArrayList() { 1, pathRegEx, "Specific a path where analysis log will be saved.", false });
 
-        
+            // generate help message
+            foreach (string k in _cmds.Keys)
+                _helpMsg.AppendFormat("-{0}\t{1}. [{2}]\n", k, _cmds[k][2], (bool)_cmds[k][3] ? "Required" : "Optional");
         }
+
+        public static string helpMessage {
+            get {
+                return _helpMsg.ToString();
+            }
+        }
+
+        public CMDConsole() {
+        }
+
         public CMDConsole(string[] args)
             : this() {
             readCommands(args);

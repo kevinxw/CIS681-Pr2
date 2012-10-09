@@ -12,7 +12,7 @@
  * Main Program
  */
 
-#define TEST_SIMPLEPARSER   // test simple parser
+//#define TEST_SIMPLEPARSER   // test simple parser
 //#define TEST_TOKENIZER       // test tokenizer
 //#define TEST_ANALYZER     // test analyzer
 //#define TEST_CMDCONSOLE   // test command line console
@@ -35,7 +35,39 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
         private static ILoader grammarLoader = new CSharpLoader();  // load cSharp grammar
 
         static void Main(string[] args) {
-            
+
+            CMDConsole cmd = new CMDConsole();
+            try {
+                cmd.readCommands(args);
+            }
+            catch (Exception e) {
+                Logger.error(e.Message);
+                while (true) ;
+            }
+
+            if ((bool)cmd[CMDConsole.helpCMD]) {
+                Logger.info(CMDConsole.helpMessage);
+                Logger.info("Press ENTER to continue other commands.");
+                while ((char)Console.In.Read() != '\r') ;
+            }
+
+            string path = cmd[CMDConsole.redirectInfoCMD] as string;
+            if (path != null) {
+                Logger.info("Log file will be saved to {0}", path);
+                Logger._info.output = Logger.Redierction.File;
+                Logger._info.saveTo = path;
+            }
+
+            Analyzer analyzer = new Analyzer(grammarLoader, cmd);
+
+            if (!(bool)cmd[CMDConsole.disableAnalyzeCMD])
+                analyzer.analyze();
+
+            if ((bool)cmd[CMDConsole.distanceCMD] || (bool)cmd[CMDConsole.allDistanceCMD])
+                analyzer.computeFileDistance();
+
+            while ((char)Console.In.Read() != '\r') ;
+
 
 #if (TEST_SIMPLEPARSER)
             testSimpleParser(args);
@@ -56,7 +88,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 #if (TEST_CMDCONSOLE)
             testCMDConsole(new string[] {"-t",@"C:\w\s",@"c:\www.aa\2","-p"});
 #endif
-            while (true) ;
+
         }
 
 #if (TEST_FILEMANAGER)
@@ -110,7 +142,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
             sp.save(@"X:\test.xml");
         }
 #endif
-        
+
     }
 
 }

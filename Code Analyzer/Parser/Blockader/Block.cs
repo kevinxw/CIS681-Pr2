@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
-using Kevin.CIS681.Project.CodeAnalyzer.Exceptions;
 using Kevin.CIS681.Project.CodeAnalyzer.Utils;
 using System.Xml.Serialization;
 using System.Xml;

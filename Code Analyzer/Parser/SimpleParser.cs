@@ -2,7 +2,7 @@
  * This is a simple version of parser that using Regular Expression
  * This parser does not use any grammar loader, thus, it only works with C#
  * 
- *
+ * 
  * 
  */
 
@@ -35,10 +35,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         private XElement xElem = null;
 
         public SimpleParser(string filePath) {
+            // actually, we can load file content from a string! but we need filepath here
             using (TextReader tr = new StreamReader(this.filePath = filePath)) {
                 fileContent = tr.ReadToEnd();
             };
-
         }
 
         public void save(string savePath) {
@@ -96,7 +96,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             removeLineTerminators(xElem);
             // set attribute to file elem
             xElem.Element("elem").SetAttributeValue("path", filePath);
-            Console.Out.WriteLine(xElem.ToString());
+            //Console.Out.WriteLine(xElem.ToString());
         }
 
         // delete all the comment
@@ -275,11 +275,9 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         // calculate function size
         private void computeSize(XElement xml) {
             IEnumerable<XElement> nodes = from nd in xml.Descendants("elem")
-                                          where nd.HasElements
+                                          //where nd.HasElements
                                           select nd;
             // the simplest way to know function size: count its children, including grandchildren
-            // the node value does not include its own text value, but the text value of its children, which actually saves us time
-            // but remember, do count the number of "controls", namely if, for, while, as they are of one size
             foreach (var n in nodes) {
                 n.SetAttributeValue("size",
                     (from nd in n.Descendants("elem") select nd).Count()

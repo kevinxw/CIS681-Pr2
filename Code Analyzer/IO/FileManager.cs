@@ -1,4 +1,6 @@
-﻿
+﻿/*
+ * FileManager gets files following wildcard patterns
+ */
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
             fileExt = grammar[CodeFileExtKey] as string[];
         }
 
-        public List<string> listCodeFile(List<string> filePath, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards=null) {
+        public List<string> listCodeFile(List<string> filePath, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards = null) {
             List<string> list = new List<string>();
             List<string> res = null;
             if (filePath != null)
@@ -32,13 +34,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
 
         // Process all files in the directory passed in, recurse on any directories  
         // that are found, and process the files they contain. 
-        public List<string> listCodeFile(string path, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards=null) {
+        public List<string> listCodeFile(string path, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards = null) {
             path = Path.GetFullPath(path);
             // whether this path should be ignored
             if (excludePath != null) {
                 string lPath = path.ToLower().Replace("/", @"\");   // convert to lower case
                 foreach (string p in excludePath) {
-                    string pLower = p.ToLower().Replace("/", @"\");
+                    string pLower = Path.GetFullPath(p.Replace("/", @"\")).ToLower();
                     if (pLower == lPath || lPath.StartsWith(pLower + @"\")) return null;
                 }
             }
@@ -63,6 +65,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
                         _wildcard.Add("*" + ext);
                 };
                 foreach (string ext in _wildcard) {
+                    // get files
                     string[] fileEntries = Directory.GetFiles(path, ext, ignoreSubDirectories ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories);
                     foreach (string file in fileEntries)
                         if (isCodeFile(file))

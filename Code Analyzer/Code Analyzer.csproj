@@ -66,10 +66,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Project.cs" />
-    <Compile Include="Exceptions\BlockNotFoundException.cs" />
+    <Compile Include="FileDistanceTask.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\Logger.cs" />
-    <Compile Include="Parser\Analyzer.cs" />
+    <Compile Include="Analyzer.cs" />
     <Compile Include="Parser\Blockader\Blockader.cs" />
     <Compile Include="Parser\Grammar\ALoader.cs" />
     <Compile Include="Parser\Grammar\CSharp\CSharpLoader.cs" />
@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Parser\ParseTask.cs" />
+    <Compile Include="Task\TaskData.cs" />
     <Compile Include="Task\TaskManager.cs" />
     <Compile Include="UI\CMDConsole.cs" />
     <Compile Include="Utils\Text.cs" />
