@@ -12,9 +12,10 @@ using Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.Rules.BlockRules;
 using Kevin.CIS681.Project.CodeAnalyzer.IO;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
-    class Parser {
+    class Parser:IParser {
 		private TextReader tr = null;	// the text reader used to parse current code file
         private string filePath = null;
         private bool _isTextFile = true;    // whether the source file is a text file
@@ -64,6 +65,15 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
                 if (byteData[0] == 0)
                     _isTextFile = false;
             return _isTextFile;
+        }
+
+        // save report
+        public void save() {
+        }
+        public void save(string savePath) {
+        }
+        public XElement xElement {
+            get{return null;}
         }
     }
 }

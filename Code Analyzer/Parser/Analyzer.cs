@@ -41,7 +41,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             if (cmds[CMDConsole. threadNumberCMD] != null)
                 threadNum = Int32.Parse(cmds[CMDConsole.threadNumberCMD] as string);
             tm = new TaskManager(threadNum);
-            tm.start(new ParseTask(), toBeProcessedFileList, allFileList.Count);
+            tm.start(new ParseTask(), toBeProcessedFileList);
         }
 
     }

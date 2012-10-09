@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Collections;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.Task {
     class TaskManager {
@@ -16,11 +17,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Task {
             ThreadPool.SetMinThreads((int)(workerNumber / 2), workerNumber);
         }
         // start tasks
-        public void start(ITask task, object state, int taskLength=100) {
+        public void start(ITask task, ICollection data) {
             // start workers
-            for (int i = 0; i < taskLength; i++) {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(task.start), state);
-            }
+            foreach (var t in data)
+                ThreadPool.QueueUserWorkItem(new WaitCallback(task.start), t);
         }
         // pause tasks
         public void pause() {

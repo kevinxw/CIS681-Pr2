@@ -35,7 +35,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
         private static ILoader grammarLoader = new CSharpLoader();  // load cSharp grammar
 
         static void Main(string[] args) {
-            //Logger.enable = true;   // enable logging for debugging
+            
 
 #if (TEST_SIMPLEPARSER)
             testSimpleParser(args);
@@ -46,7 +46,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 #endif
 
 #if (TEST_ANALYZER)
-            testAnalyzer(new string[] { "-t", @"D:\Dropbox\Projects\CSharp", @"c:\www.aa", "-e", @"D:\Dropbox\Projects\CSharp\Parser" });
+            testAnalyzer(new string[] { "-t", @"X:\Code Analyzer", @"c:\www.aa", "-e", @"D:\Dropbox\Projects\CSharp\Parser" });
 #endif
 
 #if (TEST_FILEMANAGER)
@@ -105,9 +105,12 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
 #if (TEST_SIMPLEPARSER)
         private static void testSimpleParser(string[] args) {
             string testCodeFile = @"D:\Dropbox\Projects\CSharp\Code-Analyzer\Code Analyzer\Parser\SimpleParser.cs";
-            SimpleParser sp = new SimpleParser(testCodeFile);
+            IParser sp = new SimpleParser(testCodeFile);
+            sp.read();
+            sp.save(@"X:\test.xml");
         }
 #endif
+        
     }
 
 }

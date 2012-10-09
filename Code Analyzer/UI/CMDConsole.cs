@@ -33,6 +33,8 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
         public const string threadNumberCMD = "th";
         public const string noSubDirectoryCMD = "ns";
         public const string wildcardSearchCMD = "w";
+        public const string distanceCMD = "d";
+        public const string compareTargetPathCMD = "c";
 
         public CMDConsole() {
             // target directory
@@ -49,6 +51,12 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
             _cmds.Add(helpCMD, new ArrayList() { 0, null, "show Help information, about how to use this software", false });
             // work thread numbers
             _cmds.Add(threadNumberCMD, new ArrayList() { 1, @"^\d+$", "set the number of threads that to be used in analyzing.  Ten threads by default if not specificed.", false });
+            // if we should calculate distance
+            _cmds.Add(distanceCMD, new ArrayList() { 0, null, "enable distance compare", false });
+            // target distance compare directory
+            _cmds.Add(compareTargetPathCMD, new ArrayList() { 9999, pathRegEx, "The directory you are going to calculate distance with", false });
+
+        
         }
         public CMDConsole(string[] args)
             : this() {

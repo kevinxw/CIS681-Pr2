@@ -65,9 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Persistence\Project.cs" />
+    <Compile Include="Data\Project.cs" />
     <Compile Include="Exceptions\BlockNotFoundException.cs" />
-    <Compile Include="Exceptions\BlockRelationshipConfusionException.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\Logger.cs" />
     <Compile Include="Parser\Analyzer.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Parser\Grammar\Rules\TokenRules\TokenTypeDetector.cs" />
     <Compile Include="Parser\Blockader\Block.cs" />
     <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenRule.cs" />
+    <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\SimpleParser.cs" />
     <Compile Include="Parser\Tokenizer\Token.cs" />

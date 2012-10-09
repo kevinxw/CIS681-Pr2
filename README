@@ -22,6 +22,18 @@ The purpose of this code analysis is to find functions that may need attention b
 
 [Appendix]
 
-You can find the OCD (Operational Concept Document) here:
+You can find the OCD (Operational Concept Document), a.k.a Project#1, here:
 http://goo.gl/plCHY
+
+[Diagrams]
+The diagrams simply shows how the project looks like, while it may not follows a "rigorous" software diagram syntax.
+
+Software Architecture
+http://goo.gl/RFoS3
+
+How the parser thread works
+http://goo.gl/JpvaY
+
+The project is also on GitHub!  I will keep updating this project until I am satisfied with it.
+http://goo.gl/ldRC1
 
