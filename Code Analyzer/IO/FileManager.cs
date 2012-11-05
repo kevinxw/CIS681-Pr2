@@ -7,20 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.CSharp;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
     class FileManager {
         public const string CodeFileExtKey = "file.fileExtension";
 
-        private string[] fileExt = null;
-        private ILoader grammar = null;
-
-        public FileManager(ILoader loader) {
-            grammar = loader;
-            fileExt = grammar[CodeFileExtKey] as string[];
-        }
+        private string[] fileExt = {".cs"}; // .cs is set for C Sharp file by default
 
         public List<string> listCodeFile(List<string> filePath, List<string> excludePath = null, bool ignoreSubDirectories = false, List<string> wildcards = null) {
             List<string> list = new List<string>();
@@ -57,8 +49,12 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
             else if (Directory.Exists(path)) {
                 List<string> _wildcard = null;
                 // use wildcards
-                if (wildcards != null)
+                if (wildcards != null) {
                     _wildcard = wildcards;
+                    for (int i = 0; i < _wildcard.Count; i++)
+                        if (!_wildcard[i].ToLower().EndsWith(".cs"))
+                            _wildcard[i] += ".cs";  // for C# only
+                }
                 else {
                     _wildcard = new List<string>();
                     foreach (string ext in fileExt)

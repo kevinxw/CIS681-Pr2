@@ -2,7 +2,7 @@
  * Logger
  * Use this type to log information, present it on Console or write it to a file.
  * 
- * 
+ * By default there are four types of logger created, which are Logger.info, Logger.debug, Logger.error, Logger.warn
  *
  */
 using System;
@@ -48,16 +48,25 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.IO {
         }
 
         public static void debug(string msg, params object[] objs) {
-            _debug.post(msg, objs);
+            // add lock here -> 11/2/2012
+            lock (_debug) {
+                _debug.post(msg, objs);
+            }
         }
         public static void error(string msg, params object[] objs) {
-            _error.post(msg, objs);
+            lock (_error) {
+                _error.post(msg, objs);
+            }
         }
         public static void warn(string msg, params object[] objs) {
-            _warn.post(msg, objs);
+            lock (_warn) {
+                _warn.post(msg, objs);
+            }
         }
         public static void info(string msg, params object[] objs) {
-            _info.post(msg, objs);
+            lock (_info) {
+                _info.post(msg, objs);
+            }
         }
         // log a message
         public void post(string msg, params object[] objs) {

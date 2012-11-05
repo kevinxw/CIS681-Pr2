@@ -72,6 +72,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             text = eatComment(text);
             text = eatString(text);
             text = eatUsing(text);
+            text = eatOtherBlock(text);
             //text = eatLinq(text);
             //text = eatArrayMark(text);
             text = eatCollection(text);
@@ -141,10 +142,10 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         }
         // end comment part
 
-        private readonly Regex LinqRegEx = new Regex(@"from\s+.+?\s+select\s+.+?;", RegexOptions.Compiled);
-        private string eatLinq(string text) {
-            return LinqRegEx.Replace(text, "LINQ;");
-        }
+        //private readonly Regex LinqRegEx = new Regex(@"from\s+.+?\s+select\s+.+?;", RegexOptions.Compiled);
+        //private string eatLinq(string text) {
+        //    return LinqRegEx.Replace(text, "LINQ;");
+        //}
 
         // notice the symbol \ is also a escape symbol in Regular Expression
         private readonly Regex escapedQuoteRegEx = new Regex(@"(\\\\)*\\""", RegexOptions.Compiled | RegexOptions.Multiline);
@@ -161,12 +162,12 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
         private const string genericFuncCallRegExStr = @"(?:[a-z]+\s+)*" + variableRegExStr + @"\s*\(.*\)";   // this is not a strict match!, as RegEx cannot detect the nested structure, such as FuncA(FuncB())
         private const string funcDefinationRegExStr = @"(?:[a-z]+\s+)*(" + variableRegExStr + @")\s*\([^\)]*\)"; // only match method declaration
 
-        private static readonly Regex arrayMarkRegEx = new Regex(@"\[.*?]\]", RegexOptions.Compiled | RegexOptions.Multiline);
-        private string eatArrayMark(string text) {
-            while (arrayMarkRegEx.IsMatch(text))
-                text = arrayMarkRegEx.Replace(text, "");
-            return text;
-        }
+        //private static readonly Regex arrayMarkRegEx = new Regex(@"\[.*?]\]", RegexOptions.Compiled | RegexOptions.Multiline);
+        //private string eatArrayMark(string text) {
+        //    while (arrayMarkRegEx.IsMatch(text))
+        //        text = arrayMarkRegEx.Replace(text, "");
+        //    return text;
+        //}
 
         // delete all collections, which "looks like" a function
         private static readonly Regex collectionRegEx = new Regex(@"\s*new\s+" + genericVariableRegExStr + @"(?:\[\s*\]|\(\s*\))\s*{[^}]*}", RegexOptions.Compiled | RegexOptions.Multiline);
@@ -186,23 +187,29 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             return usingRegEx.Replace(text, "");
         }
 
-        // delete all variable declaration
-        private static readonly Regex variableDeclarationRegEx = new Regex(@"([a-z]+\s+)*" + genericVariableRegExStr + @"\s+\w+\s*((,|=).+?)?;", RegexOptions.Compiled | RegexOptions.Multiline);
-        private string eatVariableDeclaration(string text) {
-            return variableDeclarationRegEx.Replace(text, ";");
+        // delete all "switch" and "lock"
+        private static readonly Regex switchAndLockEx = new Regex(@"\s(switch|lock)\s*\(\w+\)", RegexOptions.Compiled | RegexOptions.Multiline);
+        private string eatOtherBlock(string text) {
+            return switchAndLockEx.Replace(text, "");
         }
+
+        // delete all variable declaration
+        //private static readonly Regex variableDeclarationRegEx = new Regex(@"([a-z]+\s+)*" + genericVariableRegExStr + @"\s+\w+\s*((,|=).+?)?;", RegexOptions.Compiled | RegexOptions.Multiline);
+        //private string eatVariableDeclaration(string text) {
+        //    return variableDeclarationRegEx.Replace(text, ";");
+        //}
 
         // delete all evaluate phrases
-        private static readonly Regex evaluatationRegEx = new Regex("\\s" + genericVariableRegExStr + @"\s*(=\s*(" + genericVariableRegExStr + "|" + genericFuncCallRegExStr + @")\s*)+;", RegexOptions.Compiled | RegexOptions.Multiline);
-        private string eatEvaluatation(string text) {
-            return evaluatationRegEx.Replace(text, ";");
-        }
+        //private static readonly Regex evaluatationRegEx = new Regex("\\s" + genericVariableRegExStr + @"\s*(=\s*(" + genericVariableRegExStr + "|" + genericFuncCallRegExStr + @")\s*)+;", RegexOptions.Compiled | RegexOptions.Multiline);
+        //private string eatEvaluatation(string text) {
+        //    return evaluatationRegEx.Replace(text, ";");
+        //}
 
         // eat everything except keywords
-        private static readonly Regex funcCallRegEx = new Regex("\\s" + genericFuncCallRegExStr + @"\s*;", RegexOptions.Compiled | RegexOptions.Multiline);
-        private string eatFunctionCall(string text) {
-            return funcCallRegEx.Replace(text, ";");
-        }
+        //private static readonly Regex funcCallRegEx = new Regex("\\s" + genericFuncCallRegExStr + @"\s*;", RegexOptions.Compiled | RegexOptions.Multiline);
+        //private string eatFunctionCall(string text) {
+        //    return funcCallRegEx.Replace(text, ";");
+        //}
 
         private const string controlRegExWithoutBrace = @"\s(" + ccRegExStr + @")\s+(?:\(.+\))?\s*";
         // convert the code to xml

@@ -8,8 +8,6 @@ using System.Linq;
 using System.Text;
 using Kevin.CIS681.Project.CodeAnalyzer.UI;
 using Kevin.CIS681.Project.CodeAnalyzer.IO;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.CSharp;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar;
 using System.Threading;
 using Kevin.CIS681.Project.CodeAnalyzer.Task;
 using System.IO;
@@ -22,13 +20,11 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
     class Analyzer {
         private List<string> fList;
         private FileManager fm;
-        private ILoader grammar = null;
         private CMDConsole cmds = null;
         private TaskManager tm = null;
 
-        public Analyzer(ILoader loader, CMDConsole cmds) {
-            grammar = loader;
-            fm = new FileManager(loader);
+        public Analyzer(CMDConsole cmds) {
+            fm = new FileManager();
             this.cmds = cmds;
             // get file that going to be processed
             fList =

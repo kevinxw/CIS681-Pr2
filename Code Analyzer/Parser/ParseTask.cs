@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Kevin.CIS681.Project.CodeAnalyzer.Task;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Blockader;
 using Kevin.CIS681.Project.CodeAnalyzer.IO;
 using System.Threading;
 using System.Diagnostics;
@@ -27,17 +25,23 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.Parser {
             sw.Start();
             //p = new Parser(filePath);
             IParser p = new SimpleParser(filePath);
-            p.read();
-            p.save();
+            try {
+                p.read();
+                p.save();
+            }
+            catch (Exception e) {
+                Logger.error("Unable to parse file {0}", filePath);
+            }
             sw.Stop();
             Logger.debug("Thread {0}: File {1} is analyzed", Thread.CurrentThread.ManagedThreadId, filePath);
 
             // get overview information about this file
             XElement xElem = p.xElement;
+            IEnumerable<XElement> elems = xElem.Descendants("elem");
             Logger.info("Finish analyzing file {0}, {1} ms elapsed. {2} Namespaces, {3} Classes, {4} Methods are found.", filePath, sw.ElapsedMilliseconds,
-                (from e in xElem.Descendants("elem") where e.Attribute("type").Value == SimpleParser.ELEM_NAMESPACE select e).Count(),
-                (from e in xElem.Descendants("elem") where e.Attribute("type").Value == SimpleParser.ELEM_CLASS select e).Count(),
-                (from e in xElem.Descendants("elem") where e.Attribute("type").Value == SimpleParser.ELEM_METHOD select e).Count());
+                (from e in elems where e.Attribute("type").Value == SimpleParser.ELEM_NAMESPACE select e).Count(),
+                (from e in elems where e.Attribute("type").Value == SimpleParser.ELEM_CLASS select e).Count(),
+                (from e in elems where e.Attribute("type").Value == SimpleParser.ELEM_METHOD select e).Count());
 
             // finish
             td.resetEvent.Set();

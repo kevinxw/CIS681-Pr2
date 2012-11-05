@@ -60,38 +60,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Project.cs" />
-    <Compile Include="FileDistanceTask.cs" />
+    <Compile Include="Parser\FileDistanceTask.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\Logger.cs" />
     <Compile Include="Analyzer.cs" />
-    <Compile Include="Parser\Blockader\Blockader.cs" />
-    <Compile Include="Parser\Grammar\ALoader.cs" />
-    <Compile Include="Parser\Grammar\CSharp\CSharpLoader.cs" />
-    <Compile Include="Parser\Grammar\ILoader.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockIntegrityDetector.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockSizeCalculator.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\BlockTypeDetector.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\CyclomaticComplexityCalculator.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockRule.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\IBlockaderRule.cs" />
-    <Compile Include="Parser\Grammar\Rules\BlockRules\MethodBlockDetector.cs" />
-    <Compile Include="Parser\Grammar\Rules\IRule.cs" />
-    <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenizerRule.cs" />
-    <Compile Include="Parser\Grammar\Rules\TokenRules\TokenIntegrityDetector.cs" />
-    <Compile Include="Parser\Grammar\Rules\TokenRules\TokenTypeDetector.cs" />
-    <Compile Include="Parser\Blockader\Block.cs" />
-    <Compile Include="Parser\Grammar\Rules\TokenRules\ITokenRule.cs" />
     <Compile Include="Parser\IParser.cs" />
-    <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\SimpleParser.cs" />
-    <Compile Include="Parser\Tokenizer\Token.cs" />
-    <Compile Include="Parser\Tokenizer\Tokenizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -104,7 +82,6 @@
     <Compile Include="Task\TaskData.cs" />
     <Compile Include="Task\TaskManager.cs" />
     <Compile Include="UI\CMDConsole.cs" />
-    <Compile Include="Utils\Text.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

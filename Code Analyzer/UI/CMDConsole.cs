@@ -107,7 +107,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
 
         public void readCommands(string[] args) {
             string lastCMD = null;
-            Regex reg = null;
+            //Regex reg = null;
             // read arguments
             for (int i = 0; i < args.Length; i++) {
                 string str = null;
@@ -115,13 +115,13 @@ namespace Kevin.CIS681.Project.CodeAnalyzer.UI {
                     _args[lastCMD = str] = new List<string>();
                 }
                 else if (lastCMD != null)
-                    if ((reg=_cmds[lastCMD][1] as Regex) != null && reg.IsMatch(args[i])) {
-                        if (_args[lastCMD].Count >= ((int)_cmds[lastCMD][0]))
-                            throw new ArgumentException("The argument \"" + args[i] + "\" is not valid!");
+                    //if ((reg=_cmds[lastCMD][1] as Regex) != null && reg.IsMatch(args[i])) {
+                        //if (_args[lastCMD].Count >= ((int)_cmds[lastCMD][0]))
+                        //    throw new ArgumentException("The argument \"" + args[i] + "\" is not valid! (exceeds limitation)");
                         _args[lastCMD].Add(args[i]);
-                    }
-                    else
-                        throw new ArgumentException("The argument \"" + args[i] + "\" is not valid!");
+                    //}
+                   // else
+                    //    throw new ArgumentException("The argument \"" + args[i] + "\" is not valid!");
             }
             // check if every required argument is read
         }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Calculate "File distance"
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,6 +83,7 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
                             name,
                             cc
                         }).ToList();
+            // how to write a function of which the return type is "var"?
             var right = (from e in xElem[1].Descendants("elem")
                          where e.Attribute("type").Value == SimpleParser.ELEM_METHOD
                                && e.Attribute("cc") != null

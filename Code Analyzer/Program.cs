@@ -22,17 +22,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Tokenizer;
 using Kevin.CIS681.Project.CodeAnalyzer.UI;
 using System.IO;
 using Kevin.CIS681.Project.CodeAnalyzer.IO;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar.CSharp;
-using Kevin.CIS681.Project.CodeAnalyzer.Parser.Grammar;
 using Kevin.CIS681.Project.CodeAnalyzer.Parser;
 
 namespace Kevin.CIS681.Project.CodeAnalyzer {
     class Program {
-        private static ILoader grammarLoader = new CSharpLoader();  // load cSharp grammar
 
         static void Main(string[] args) {
 
@@ -58,14 +54,18 @@ namespace Kevin.CIS681.Project.CodeAnalyzer {
                 Logger._info.saveTo = path;
             }
 
-            Analyzer analyzer = new Analyzer(grammarLoader, cmd);
+            Analyzer analyzer = new Analyzer(cmd);
 
-            if (!(bool)cmd[CMDConsole.disableAnalyzeCMD])
-                analyzer.analyze();
+            try {
+                if (!(bool)cmd[CMDConsole.disableAnalyzeCMD])
+                    analyzer.analyze();
 
-            if ((bool)cmd[CMDConsole.distanceCMD] || (bool)cmd[CMDConsole.allDistanceCMD])
-                analyzer.computeFileDistance();
-
+                if ((bool)cmd[CMDConsole.distanceCMD] || (bool)cmd[CMDConsole.allDistanceCMD])
+                    analyzer.computeFileDistance();
+            }
+            catch (Exception e) {
+                Console.Out.WriteLine(e.Message);
+            }
             while ((char)Console.In.Read() != '\r') ;
 
 
